@@ -3,7 +3,7 @@
 A responsive single product page built with vanilla JavaScript, HTML5, and CSS3. 
 
 ![main-interface.png](main-interface.png)
-<img alt="mini-cart.png" height="380" src="mini-cart.png" width="750"/>
+<img alt="mini-cart.png" height="450" src="mini-cart.png" width="670"/>
 
 ## Features
 

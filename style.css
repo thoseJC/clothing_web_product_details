@@ -383,7 +383,7 @@ body {
     padding: 1rem;
     border-top: 1px solid #eee;
     margin-top: 1rem;
-    background: #fff; /* Ensure background is white */
-    position: sticky; /* Optional: Make total and button stick to bottom */
+    background: #fff;
+    position: sticky; /* ensure total and button stick to bottom */
     bottom: 0;
 }

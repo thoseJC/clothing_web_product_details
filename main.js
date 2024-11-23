@@ -120,7 +120,6 @@ function addToCart() {
 }
 
 // Update cart display
-// Update cart display
 function updateCart() {
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
     elements.cartCount.textContent = totalItems;
