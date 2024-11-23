@@ -115,6 +115,7 @@ function addToCart() {
 }
 
 // Update cart display
+// Update cart display
 function updateCart() {
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
     elements.cartCount.textContent = totalItems;
@@ -139,19 +140,33 @@ function updateCart() {
         </div>
     `).join('');
 
+    // In updateCart function, update the totalElement innerHTML:
     if (cart.length > 0) {
-        const cartTotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+        const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+        const shippingFee = 5.00;
+        const finalTotal = subtotal + shippingFee;
+
         const totalElement = document.createElement('div');
         totalElement.className = 'cart-total';
         totalElement.innerHTML = `
             <div class="total-line"></div>
-            <div class="total-amount">
-                <span>Total:</span>
-                <span>$${cartTotal.toFixed(2)}</span>
+            <div class="total-details">
+                <div class="total-row">
+                    <div class="total-label">Subtotal:</div>
+                    <div class="total-value">$${subtotal.toFixed(2)}</div>
+                </div>
+                <div class="total-row">
+                    <div class="total-label">Shipping fee:</div>
+                    <div class="total-value">$${shippingFee.toFixed(2)}</div>
+                </div>
+                <div class="total-row final">
+                    <div class="total-label">Total(gst incl):</div>
+                    <div class="total-value">$${finalTotal.toFixed(2)}</div>
+                </div>
             </div>
         `;
-        elements.cartItems.appendChild(totalElement);
-    }
+    elements.cartItems.appendChild(totalElement);
+}
 }
 
 // Update item quantity

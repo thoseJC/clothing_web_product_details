@@ -269,6 +269,40 @@ body {
     margin-top: 1rem;
 }
 
+.total-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.25rem 0;
+}
+
+.total-row.final {
+    font-weight: bold;
+    border-top: 1px solid #eee;
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+}
+
+.total-label {
+    color: #666;
+}
+
+.total-value {
+    font-weight: 500;
+}
+
+.total-row.final .total-label,
+.total-row.final .total-value {
+    color: #222;
+    font-weight: bold;
+}
+
 .total-amount {
     display: flex;
     justify-content: space-between;
