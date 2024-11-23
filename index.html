@@ -7,59 +7,64 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Header Section -->
-    <header class="header">
+<header class="header">
         <div class="header-container">
             <h1>Classic Tee</h1>
-            <!-- Cart Toggle -->
-            <div class="cart-toggle" id="cart-toggle">
-                My Cart (<span id="cart-count">0</span>)
+            <!-- Cart Toggle and Mini Cart -->
+            <div class="cart-toggle-wrapper">
+                <div class="cart-toggle-button">
+                    My Cart (<span id="cart-count">0</span>)
+                </div>
+                <!-- Mini Cart Container -->
+                <div class="mini-cart">
+                    <div class="mini-cart-header">
+                        <h3>My Cart</h3>
+                        <button class="close-cart">&times;</button>
+                    </div>
+                    <div class="cart-items-container"></div>
+                    <div class="cart-empty-message">
+                        Your cart is empty
+                    </div>
+                </div>
             </div>
         </div>
     </header>
 
-    <!-- Main Content Section -->
-    <main class="main-content">
+    <main class="main-content" role="main">
         <div class="product-container">
-            <!-- Product Image -->
             <div class="product-image-container">
                 <img id="product-image" src="" alt="Product Image" class="product-image">
             </div>
 
-            <!-- Product Details -->
             <div class="product-details">
                 <h1 id="product-title" class="product-title"></h1>
                 <p id="product-price" class="product-price"></p>
                 <p id="product-description" class="product-description"></p>
 
-                <!-- Size Selector -->
                 <div class="size-selector">
                     <h3>SIZE<span class="required">*</span></h3>
                     <div id="size-options" class="size-options"></div>
                 </div>
 
-                <!-- Error Message -->
                 <p id="error-message" class="error-message"></p>
-
-                <!-- Add to Cart Button -->
                 <button id="add-to-cart" class="add-to-cart-btn">ADD TO CART</button>
             </div>
         </div>
     </main>
 
-    <!-- Mini Cart -->
     <div id="mini-cart" class="mini-cart">
         <div class="mini-cart-header">
             <h3>My Cart</h3>
             <button id="close-cart" class="close-cart">&times;</button>
         </div>
         <div id="cart-items" class="cart-items"></div>
-        <div id="cart-empty-message" class="cart-empty">Your cart is empty</div>
+        <div id="cart-empty-message" class="cart-empty">
+            Your cart is empty
+        </div>
     </div>
 
-    <!-- Overlay -->
     <div id="overlay" class="overlay"></div>
 
-    <script src="main.js" type="module"></script>
+    <script type="module" src="main.js"></script>
 </body>
 </html>
