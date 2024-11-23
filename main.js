@@ -109,9 +109,14 @@ function addToCart() {
     }
 
     updateCart();
-    openCart();
-    hideError();
     saveCartToStorage();
+    hideError();
+
+    // Force open the cart
+    elements.miniCart.classList.add('open');
+    elements.overlay.style.display = 'block';
+
+    console.log('Cart opened:', elements.miniCart.classList.contains('open'));
 }
 
 // Update cart display
@@ -164,6 +169,7 @@ function updateCart() {
                     <div class="total-value">$${finalTotal.toFixed(2)}</div>
                 </div>
             </div>
+            <button class="checkout-button">PROCEED TO CHECKOUT</button>
         `;
     elements.cartItems.appendChild(totalElement);
 }
