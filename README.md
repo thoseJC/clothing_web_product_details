@@ -1,6 +1,6 @@
 # Classic Tee Product Page
 
-A responsive single product page built with vanilla JavaScript, HTML5, and CSS3. This project demonstrates a mini shopping cart implementation with local storage and API caching functionality.
+A responsive single product page built with vanilla JavaScript, HTML5, and CSS3. 
 
 ![main-interface.png](main-interface.png)
 ![mini-cart.png](mini-cart.png)
