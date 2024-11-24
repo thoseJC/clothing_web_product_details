@@ -1,13 +1,12 @@
-import { ProductCache } from './cache-utility.js';
+// Main script for handling product fetching and cart logic
 
 // Constants
-const API_URL = 'https://3sb655pz3a.execute-api.ap-southeast-2.amazonaws.com/live/product';
-const cache = new ProductCache();
+const API_URL = 'https://3sb655pz3a.execute-api.ap-southeast-2.amazonaws.com/live/product'; // API endpoint for product data
 
 // State variables
-let product = null;
-let selectedSize = null;
-let cart = [];
+let product = null; // Holds the current product data
+let selectedSize = null; // Tracks the selected size of the product
+let cart = []; // Tracks the items in the shopping cart
 
 // Initialize DOM elements
 function initializeElements() {
@@ -29,28 +28,15 @@ function initializeElements() {
     };
 }
 
-let elements = null;
+let elements = null; // Placeholder for initialized DOM elements
 
 // Fetch product data
 async function fetchProductData() {
     try {
-        const cachedData = await cache.get('product');
-        if (cachedData) {
-            product = cachedData;
-            renderProduct();
-            return;
-        }
-
-        if (!cache.canMakeRequest()) {
-            throw new Error('Rate limit exceeded. Please try again later.');
-        }
-
-        cache.incrementRequestCount();
         const response = await fetch(API_URL);
         if (!response.ok) throw new Error('Failed to fetch product data.');
 
         product = await response.json();
-        cache.set('product', product);
         renderProduct();
     } catch (error) {
         displayError(error.message);
@@ -111,15 +97,11 @@ function addToCart() {
     updateCart();
     saveCartToStorage();
     hideError();
-
-    // Force open the cart
     elements.miniCart.classList.add('open');
     elements.overlay.style.display = 'block';
-
-    console.log('Cart opened:', elements.miniCart.classList.contains('open'));
 }
 
-// Update cart display
+// Update the cart UI
 function updateCart() {
     const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
     elements.cartCount.textContent = totalItems;
@@ -143,78 +125,20 @@ function updateCart() {
             </div>
         </div>
     `).join('');
-
-    // In updateCart function, update the totalElement innerHTML:
-    if (cart.length > 0) {
-        const subtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
-        const shippingFee = 5.00;
-        const finalTotal = subtotal + shippingFee;
-
-        const totalElement = document.createElement('div');
-        totalElement.className = 'cart-total';
-        totalElement.innerHTML = `
-            <div class="total-line"></div>
-            <div class="total-details">
-                <div class="total-row">
-                    <div class="total-label">Subtotal:</div>
-                    <div class="total-value">$${subtotal.toFixed(2)}</div>
-                </div>
-                <div class="total-row">
-                    <div class="total-label">Shipping fee:</div>
-                    <div class="total-value">$${shippingFee.toFixed(2)}</div>
-                </div>
-                <div class="total-row final">
-                    <div class="total-label">Total(gst incl):</div>
-                    <div class="total-value">$${finalTotal.toFixed(2)}</div>
-                </div>
-            </div>
-            <button class="checkout-button">PROCEED TO CHECKOUT</button>
-        `;
-    elements.cartItems.appendChild(totalElement);
-}
 }
 
-// Update item quantity
-function updateQuantity(itemId, delta) {
-    const item = cart.find(item => item.id === itemId);
-    if (item) {
-        const newQuantity = item.quantity + delta;
-        if (newQuantity <= 0) {
-            cart = cart.filter(cartItem => cartItem.id !== itemId);
-        } else {
-            item.quantity = newQuantity;
-        }
+// Save cart to local storage
+function saveCartToStorage() {
+    localStorage.setItem('cart', JSON.stringify(cart));
+}
 
+// Load cart from local storage
+function loadCartFromStorage() {
+    const savedCart = localStorage.getItem('cart');
+    if (savedCart) {
+        cart = JSON.parse(savedCart);
         updateCart();
-        saveCartToStorage();
-
-        if (cart.length === 0) {
-            closeCart();
-        }
     }
-}
-
-// Cart visibility functions
-function toggleCart(e) {
-    if (e) e.stopPropagation();
-    const isOpen = elements.miniCart.classList.contains('open');
-    if (isOpen) {
-        closeCart();
-    } else {
-        openCart();
-    }
-}
-
-function openCart() {
-    console.log('Opening cart...');
-    elements.miniCart.classList.add('open');
-    elements.overlay.style.display = 'block';
-}
-
-function closeCart() {
-    console.log('Closing cart...');
-    elements.miniCart.classList.remove('open');
-    elements.overlay.style.display = 'none';
 }
 
 // Error handling
@@ -227,96 +151,38 @@ function hideError() {
     elements.errorMessage.style.display = 'none';
 }
 
-// Local Storage functions
-function saveCartToStorage() {
-    localStorage.setItem('cart', JSON.stringify(cart));
-}
-
-function loadCartFromStorage() {
-    const savedCart = localStorage.getItem('cart');
-    if (savedCart) {
-        cart = JSON.parse(savedCart);
-        updateCart();
-    }
-}
-
-// Initialize event listeners
-function initializeEventListeners() {
-    console.log('Initializing event listeners...');
-    console.log('Elements:', elements);
-
+// Initialize the application
+function init() {
+    elements = initializeElements();
     if (elements.addToCartBtn) {
         elements.addToCartBtn.addEventListener('click', addToCart);
     }
-
-    if (elements.cartToggle) {
-        elements.cartToggle.addEventListener('click', toggleCart);
-    }
-
-    if (elements.closeCart) {
-        elements.closeCart.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            closeCart();
-        });
-    }
-
-    if (elements.overlay) {
-        elements.overlay.addEventListener('click', closeCart);
-    }
-
-    // Close cart when clicking outside
-    document.addEventListener('click', (e) => {
-        if (elements.miniCart?.classList.contains('open') &&
-            !elements.miniCart.contains(e.target) &&
-            !elements.cartToggle.contains(e.target)) {
-            closeCart();
-        }
-    });
-
-    // Handle keyboard events
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && elements.miniCart?.classList.contains('open')) {
-            closeCart();
-        }
-    });
-
-    // Handle responsive design
-    window.addEventListener('resize', () => {
-        if (window.innerWidth <= 768) {
-            elements.miniCart.style.width = '100%';
-        } else {
-            elements.miniCart.style.width = '400px';
-        }
-    });
-
-    // Handle network status
-    window.addEventListener('online', fetchProductData);
-    window.addEventListener('offline', () => {
-        displayError('You are currently offline. Some features may be unavailable.');
-    });
+    fetchProductData();
+    loadCartFromStorage();
 }
 
-// Make updateQuantity available globally for the onclick handlers
+// Update item quantity in the cart
+function updateQuantity(itemId, delta) {
+    const item = cart.find(item => item.id === itemId); // Find the item in the cart by its ID
+    if (item) {
+        const newQuantity = item.quantity + delta; // Calculate the new quantity
+        if (newQuantity <= 0) {
+            cart = cart.filter(cartItem => cartItem.id !== itemId); // Remove the item if quantity is zero
+        } else {
+            item.quantity = newQuantity; // Update the item's quantity
+        }
+
+        updateCart(); // Refresh the cart display
+        saveCartToStorage(); // Save the updated cart to local storage
+
+        if (cart.length === 0) {
+            closeCart(); // Close the cart if it becomes empty
+        }
+    }
+}
+
+// Assign the function to the window object for global access
 window.updateQuantity = updateQuantity;
 
-// Initialize application
-function init() {
-    console.log('Initializing application...');
-    elements = initializeElements();
 
-    if (elements.closeCart && elements.cartToggle && elements.miniCart) {
-        initializeEventListeners();
-        fetchProductData();
-        loadCartFromStorage();
-    } else {
-        console.error('Required DOM elements not found:', {
-            closeCart: elements.closeCart,
-            cartToggle: elements.cartToggle,
-            miniCart: elements.miniCart
-        });
-    }
-}
-
-// Wait for DOM to be fully loaded
 document.addEventListener('DOMContentLoaded', init);
