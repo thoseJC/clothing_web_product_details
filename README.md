@@ -3,7 +3,6 @@
 A responsive single product page built with vanilla JavaScript, HTML5, and CSS3. 
 
 ![main-interface.png](main-interface.png)
-<img alt="mini-cart.png" height="450" src="mini-cart.png" width="670"/>
 
 ## Features
 
@@ -13,10 +12,8 @@ A responsive single product page built with vanilla JavaScript, HTML5, and CSS3.
   - Add to cart
   - Update quantities
   - Remove items
-  - Auto-calculate totals with shipping
 - Responsive design for mobile and desktop
 - Local storage for cart persistence
-- API caching to handle rate limits (5 requests/hour)
 
 ## Getting Started
 
@@ -49,24 +46,12 @@ cd clothing_web_page
 - Select 'Open In > Browser'
 - Choose your preferred browser
 
-4. Alternative Method(such as VSCode+Live server):
-- Launch the Project with Live Server
-- In the Explorer panel, right-click on index.html
-- Select Open with Live Server.
-
 ## Key Features Explained
 
 ### Cart Functionality
 - Shows subtotal, shipping fee ($5.00), and total
 - Quantities can be adjusted with +/- buttons
 - Cart state persists using localStorage
-
-### API Caching
-The `ProductCache` class handles:
-- Rate limiting (5 requests per hour)
-- Cache duration (12 minutes)
-- Request counting
-- Cache storage and retrieval
 
 ### Responsive Design
 - Desktop: Side-by-side product layout with dropdown cart
@@ -82,10 +67,6 @@ The `ProductCache` class handles:
    - Check console for API errors
    - Verify network connection
 
-3. If cart doesn't close:
-   - Ensure close button has `id="close-cart"`
-   - Check event propagation in console
-
 ## Future Improvements
 - Cart opens automatically when adding items
 - Add checkout functionality
@@ -94,28 +75,3 @@ The `ProductCache` class handles:
 - Add loading states
 - Implement search functionality
 
-## Development Notes
-
-### State Management
-```javascript
-// Main state variables
-let product = null;        // Current product data
-let selectedSize = null;   // Selected size
-let cart = [];            // Cart items
-```
-
-### CSS Classes
-Important classes to know:
-- `.mini-cart.open` - Shows the cart
-- `.size-button.selected` - Selected size button
-- `.cart-item` - Individual cart items
-
-### Local Storage
-Cart data persists between page refreshes:
-```javascript
-// Save cart
-localStorage.setItem('cart', JSON.stringify(cart));
-
-// Load cart
-const savedCart = localStorage.getItem('cart');
-```
