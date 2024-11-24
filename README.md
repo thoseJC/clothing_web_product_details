@@ -49,11 +49,10 @@ cd clothing_web_page
 - Select 'Open In > Browser'
 - Choose your preferred browser
 
-4. Alternative Method(such as VSCode):
-
-- Right-click on index.html
-- Select 'Open In Browser'
-- Choose your preferred browser
+4. Alternative Method(such as VSCode+Live server):
+- Launch the Project with Live Server
+- In the Explorer panel, right-click on index.html
+- Select Open with Live Server.
 
 ## Key Features Explained
 
